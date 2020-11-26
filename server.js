@@ -1,8 +1,9 @@
 const app = require("./app");
-const config = require("./config");
+const dotenv = require('dotenv');
+dotenv.config({ path: './.env' });
 
-const PORT = config.PORT || 8000;
+const port = process.env.PORT || 8000;
 
-app.listen(PORT, () =>
-  console.log(`Server has started on port localhost:${PORT}`)
+app.listen(port, () =>
+  console.log(`Server has started on port localhost:${port}`)
 );
