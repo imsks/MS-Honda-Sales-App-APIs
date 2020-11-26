@@ -6,7 +6,7 @@ const error = require("../../utils/errors");
 // 1. Initialize the Firestore
 const db = firebase.firestore();
 // 2. Create Auth reference
-const authRef = db.collection("auth");
+const userRef = db.collection("users");
 
 // For testing only => Can be removed
 exports.test = (req, res) => {
@@ -18,13 +18,13 @@ exports.test = (req, res) => {
 
 // User Sign In Route
 exports.signIn = async (req, res) => {
-  const { email, password } = req.body;
+  const { userName, password } = req.body;
 
   // 0. Check if user has submitted correct data
-  if (!email) {
+  if (!userName) {
     res.status(400).json({
       status: "Fail",
-      message: error.errorMessages.nullEmail,
+      message: error.errorMessages.nullUserName,
     });
     return;
   }
@@ -38,7 +38,7 @@ exports.signIn = async (req, res) => {
   }
 
   // 1. Check if user exists
-  const query = await authRef.where("email", "==", email).get();
+  const query = await userRef.where("userName", "==", userName).get();
   if (query.empty) {
     res.status(400).json({
       status: "Fail",
@@ -56,7 +56,10 @@ exports.signIn = async (req, res) => {
         res.status(200).json({
           status: "Success",
           message: "Signing in successful.",
-          data,
+          data: {
+            userName: user.userName,
+            userId: snapshot.id,
+          },
         });
       } else {
         res.status(400).json({
@@ -70,21 +73,12 @@ exports.signIn = async (req, res) => {
 
 // User Sign Up
 exports.signUp = async (req, res) => {
-  const { name, email, profession, password } = req.body;
+  const { userName, password } = req.body;
 
-  // 0. Check if user has submitted correct data
-  if (!name) {
+  if (!userName) {
     res.status(400).json({
       status: "Fail",
-      message: error.errorMessages.nullName,
-    });
-    return;
-  }
-
-  if (!email) {
-    res.status(400).json({
-      status: "Fail",
-      message: error.errorMessages.nullEmail,
+      message: error.errorMessages.nullUserName,
     });
     return;
   }
@@ -98,7 +92,7 @@ exports.signUp = async (req, res) => {
   }
 
   // 1. Check if user already exists
-  const snapshot = await authRef.where("email", "==", email).get();
+  const snapshot = await userRef.where("userName", "==", userName).get();
   if (!snapshot.empty) {
     // User already exist
     res.status(400).json({
@@ -108,15 +102,13 @@ exports.signUp = async (req, res) => {
   } else {
     bcrypt.hash(password, 10, async function (err, hash) {
       // 1. Store hash in your password DB.
-      await authRef.add({
-        name,
-        email,
-        profession,
+      await userRef.add({
+        userName,
         password: hash,
       });
 
       // 2. Get the current user data
-      const query = await authRef.where("email", "==", email).get();
+      const query = await userRef.where("userName", "==", userName).get();
       const snapshot = query.docs[0];
       const user = snapshot.data();
 

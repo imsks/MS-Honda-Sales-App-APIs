@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json({ limit: "50mb" }));
 app.use(bodyParser.json());
 
-// 1. User Base Routes
+// 1. User Routes
 app.use("/api/user/auth", userAuth);
 
 module.exports = app;
