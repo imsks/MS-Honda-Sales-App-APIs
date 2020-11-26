@@ -1,0 +1,23 @@
+{
+  "name": "node-firebase-with-auth",
+  "author": {
+    "name": "Sachin Kr. Shukla",
+    "url": "https://github.com/imsks"
+  },
+  "version": "1.0.0",
+  "engines": {
+    "node": "10.14.2"
+  },
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "~4.16.1",
+    "firebase": "^7.24.0",
+    "nodemon": "^2.0.4"
+  }
+}
