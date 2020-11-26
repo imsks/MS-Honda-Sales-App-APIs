@@ -45,12 +45,13 @@ exports.addCarData = async (req, res) => {
 };
 
 exports.getACarData = async (req, res) => {
-  const { carName, carModel } = req.query;
-  // console.log(req.query);
+  const { carName, carModel, carType } = req.query;
+  console.log(req.query);
 
   const snapshot = await carRef
+  .where("carData.carName", "==", carName)
     .where("carData.modelNo", "==", carModel)
-    .where("carData.carName", "==", carName)
+    .where("carData.type", "==", carType)
     .get();
   //   console.log(query);
   if (!snapshot.empty) {
