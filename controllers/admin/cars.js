@@ -46,10 +46,9 @@ exports.addCarData = async (req, res) => {
 
 exports.getACarData = async (req, res) => {
   const { carName, carModel, carType } = req.query;
-  console.log(req.query);
 
   const snapshot = await carRef
-  .where("carData.carName", "==", carName)
+    .where("carData.carName", "==", carName)
     .where("carData.modelNo", "==", carModel)
     .where("carData.type", "==", carType)
     .get();
@@ -63,6 +62,25 @@ exports.getACarData = async (req, res) => {
           carId: car.id,
         },
       });
+    });
+  } else {
+    res.status(400).json({
+      status: "Fail",
+      message: error.errorMessages.carDoesNotExists,
+    });
+  }
+};
+
+exports.getACarDataById = async (req, res) => {
+  const { id } = req.params;
+
+  const snapshot = await carRef.doc(id).get();
+  //   console.log(query);
+
+  if (snapshot.exists) {
+    res.status(200).json({
+      status: "Success",
+      data: snapshot.data(),
     });
   } else {
     res.status(400).json({
@@ -116,6 +134,7 @@ exports.editCarData = async (req, res) => {
 
 exports.deleteACar = async (req, res) => {
   const { carId } = req.body;
+  console.log(req.body);
 
   await carRef
     .doc(carId)
