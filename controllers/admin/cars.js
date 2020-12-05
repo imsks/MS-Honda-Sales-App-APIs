@@ -52,7 +52,6 @@ exports.getACarData = async (req, res) => {
     .where("carData.modelNo", "==", carModel)
     .where("carData.type", "==", carType)
     .get();
-  //   console.log(query);
   if (!snapshot.empty) {
     snapshot.forEach((car) => {
       res.status(200).json({
@@ -75,7 +74,6 @@ exports.getACarDataById = async (req, res) => {
   const { id } = req.params;
 
   const snapshot = await carRef.doc(id).get();
-  //   console.log(query);
 
   if (snapshot.exists) {
     res.status(200).json({
@@ -94,9 +92,7 @@ exports.getAllCarsData = async (req, res) => {
   const snapshot = await carRef.get();
 
   const data = [];
-  // console.log(snapshot)
   snapshot.forEach((doc) => {
-    // console.log(doc.data());
     data.push({
       id: doc.id,
       data: doc.data(),
@@ -134,7 +130,6 @@ exports.editCarData = async (req, res) => {
 
 exports.deleteACar = async (req, res) => {
   const { carId } = req.body;
-  console.log(req.body);
 
   await carRef
     .doc(carId)
