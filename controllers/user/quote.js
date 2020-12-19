@@ -52,3 +52,26 @@ exports.getAllQuotes = async (req, res) => {
     data: allQuotesData,
   });
 };
+
+// Update Booked Status
+exports.updateBookedStatus = async (req, res) => {
+  const { id, isBooked } = req.body;
+
+  await quoteRef
+    .doc(id)
+    .update({
+      isBooked,
+    })
+    .then(() => {
+      res.status(200).json({
+        status: "Success",
+        message: "Status updated",
+      });
+    })
+    .catch(() => {
+      res.status(400).json({
+        status: "Fail",
+        message: "Something went wrong",
+      });
+    });
+};
