@@ -6,5 +6,6 @@ router.route("/test").get(quoteController.test);
 
 // For Auth
 router.route("/set-quote-for-customer").post(quoteController.postQuote);
+router.route("/get-all-quotes").get(quoteController.getAllQuotes);
 
 module.exports = router;

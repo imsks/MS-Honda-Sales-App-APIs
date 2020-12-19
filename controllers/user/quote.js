@@ -15,6 +15,7 @@ exports.test = (req, res) => {
   });
 };
 
+// Post A Quote
 exports.postQuote = async (req, res) => {
   const { data } = req.body;
   console.log(data);
@@ -31,4 +32,23 @@ exports.postQuote = async (req, res) => {
         message: "Car quote added successfully",
       });
     });
+};
+
+// Get All Quotes
+exports.getAllQuotes = async (req, res) => {
+  let allQuotesData = [];
+  // Add quote
+  await quoteRef.get().then((snapshot) => {
+    snapshot.forEach((quote) => {
+      allQuotesData.push({
+        id: quote.id,
+        quoteData: quote.data(),
+      });
+    });
+  });
+
+  res.status(200).json({
+    status: "Success",
+    data: allQuotesData,
+  });
 };
